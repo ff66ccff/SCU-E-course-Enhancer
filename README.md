@@ -3,7 +3,7 @@
 [简体中文](#简体中文) | [English](#english)
 
 [![Greasy Fork Installs](https://img.shields.io/greasyfork/dt/547083?style=for-the-badge&logo=tampermonkey)](https://greasyfork.org/zh-CN/scripts/547083)
-[![Version](https://img.shields.io/badge/version-2.1-blue?style=for-the-badge)](https://greasyfork.org/zh-CN/scripts/547083)
+[![Version](https://img.shields.io/badge/version-2.3-blue?style=for-the-badge)](https://greasyfork.org/zh-CN/scripts/547083)
 [![License](https://img.shields.io/badge/license-MIT-green?style=for-the-badge)](https://github.com/ff66ccff/SCU-E-course-Enhancer/blob/main/LICENSE)
 [![Language](https://img.shields.io/badge/language-JavaScript-yellow?style=for-the-badge)](https://github.com/ff66ccff/SCU-E-course-Enhancer)
 
