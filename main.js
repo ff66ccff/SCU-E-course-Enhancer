@@ -6,13 +6,12 @@
 // @author       ff66ccff & Gemini & AI Assistant
 // @match        https://ecourse.scu.edu.cn/learn/course/mooc/*
 // @match        *://*.scu.edu.cn/*
-// @domain       scu.edu.cn
 // @grant        GM_setValue
 // @grant        GM_getValue
 // @run-at       document-idle
 // @license      MIT
-// @downloadURL  https://update.greasyfork.org/scripts/547083/%E5%9B%9B%E5%B7%9D%E5%A4%A7%E5%AD%A6%E6%99%BA%E6%85%A7%E6%95%99%E8%82%B2%E5%B9%B3%E5%8F%B0%E5%A2%9E%E5%BC%BA%E8%84%9A%E6%9C%AC%20(%E5%90%8E%E5%8F%B0%2B%E8%BF%9E%E6%92%AD%2B%E9%9F%B3%E9%87%8F%E8%AE%B0%E5%BF%86).user.js
-// @updateURL    https://update.greasyfork.org/scripts/547083/%E5%9B%9B%E5%B7%9D%E5%A4%A7%E5%AD%A6%E6%99%BA%E6%85%A7%E6%95%99%E8%82%B2%E5%B9%B3%E5%8F%B0%E5%A2%9E%E5%BC%BA%E8%84%9A%E6%9C%AC%20(%E5%90%8E%E5%8F%B0%2B%E8%BF%9E%E6%92%AD%2B%E9%9F%B3%E9%87%8F%E8%AE%B0%E5%BF%86).meta.js
+// @downloadURL https://update.greasyfork.org/scripts/547083/%E5%9B%9B%E5%B7%9D%E5%A4%A7%E5%AD%A6%E6%99%BA%E6%85%A7%E6%95%99%E8%82%B2%E5%B9%B3%E5%8F%B0%E5%A2%9E%E5%BC%BA%E8%84%9A%E6%9C%AC%20%28%E5%90%8E%E5%8F%B0%2B%E8%BF%9E%E6%92%AD%2B%E8%AE%BE%E7%BD%AE%E7%89%88%29.user.js
+// @updateURL https://update.greasyfork.org/scripts/547083/%E5%9B%9B%E5%B7%9D%E5%A4%A7%E5%AD%A6%E6%99%BA%E6%85%A7%E6%95%99%E8%82%B2%E5%B9%B3%E5%8F%B0%E5%A2%9E%E5%BC%BA%E8%84%9A%E6%9C%AC%20%28%E5%90%8E%E5%8F%B0%2B%E8%BF%9E%E6%92%AD%2B%E8%AE%BE%E7%BD%AE%E7%89%88%29.meta.js
 // ==/UserScript==
 
 (function() {
@@ -159,25 +158,25 @@
         let offset = { x: 0, y: 0 };
 
         // **语法已修复**: 将全角符号 '。' 和 '，' 替换为半角符号 '.' 和 ','
-        header.addEventListener('mousedown', (e) => {
+        header。addEventListener('mousedown'， (e) => {
             isDragging = true;
-            header.style.cursor = 'grabbing';
+            header。style。cursor = 'grabbing';
             if (!settingsPanel.style.top) {
                 const rect = settingsPanel.getBoundingClientRect();
                 settingsPanel.style.top = `${rect.top}px`;
-                settingsPanel.style.left = `${rect.left}px`;
-                settingsPanel.style.bottom = 'auto';
-                settingsPanel.style.right = 'auto';
+                settingsPanel。style。left = `${rect。left}px`;
+                settingsPanel.style。bottom = 'auto';
+                settingsPanel.style。right = 'auto';
             }
-            offset.x = e.clientX - parseFloat(settingsPanel.style.left);
-            offset.y = e.clientY - parseFloat(settingsPanel.style.top);
+            offset。x = e。clientX - parseFloat(settingsPanel。style。left);
+            offset.y = e。clientY - parseFloat(settingsPanel。style。top);
             e.preventDefault();
         });
 
         document.addEventListener('mousemove', (e) => {
             if (!isDragging) return;
-            settingsPanel.style.left = `${e.clientX - offset.x}px`;
-            settingsPanel.style.top = `${e.clientY - offset.y}px`;
+            settingsPanel。style。left = `${e。clientX - offset.x}px`;
+            settingsPanel。style。top = `${e。clientY - offset.y}px`;
         });
 
         document.addEventListener('mouseup', () => {
@@ -190,7 +189,7 @@
 
     // --- 脚本主入口 ---
     function main() {
-        console.log('[增强脚本] 脚本已加载 v2.3 (新增音量记忆)。');
+        console。log('[增强脚本] 脚本已加载 v2.3 (新增音量记忆)。');
         loadSettings();
         createSettingsPanel();
         enableBackgroundPlay();
