@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         四川大学智慧教育平台增强脚本 (后台+连播+设置版)
+// @name         四川大学智慧教育平台增强脚本 (后台+连播+音量记忆)
 // @namespace    http://tampermonkey.net/
-// @version      2.2
-// @description  后台播放、自动连播，并提供设置面板进行开关。修复了自动连播的稳定性和设置面板拖动变形的问题。
+// @version      2.3
+// @description  后台播放、自动连播、音量记忆，并提供设置面板进行开关。修复了自动连播的稳定性和设置面板拖动变形的问题。
 // @author       ff66ccff & Gemini & AI Assistant
 // @match        https://ecourse.scu.edu.cn/learn/course/mooc/*
 // @grant        GM_setValue
@@ -45,37 +45,56 @@
         }
     }
 
-    // --- 功能2：自动播放下一个视频 (已修复) ---
-    function enableAutoNextVideo() {
-        if (!SETTINGS.autoNextVideo) return;
-
+    // --- 功能2：视频增强功能 (自动连播 + 音量记忆) ---
+    function setupVideoPlayerExtensions() {
         const videoInterval = setInterval(() => {
             const videoElement = document.querySelector('video');
             if (videoElement) {
                 clearInterval(videoInterval);
-                console.log('[增强脚本] 视频元素已找到，自动连播功能准备就绪。');
-                videoElement.addEventListener('ended', () => {
-                    if (!SETTINGS.autoNextVideo) return;
-                    console.log('[增强脚本] 视频播放结束，正在查找“下一个学习内容”按钮...');
-                    let attempts = 0;
-                    const maxAttempts = 20; // 最多尝试20次 (10秒)
-                    const findButtonInterval = setInterval(() => {
-                        attempts++;
-                        const nextButton = document.querySelector('.next_video_btn');
-                        // 检查按钮是否存在且可见 (offsetParent 在元素可见时才不为null)
-                        if (nextButton && nextButton.offsetParent !== null) {
-                            console.log('[增强脚本] “下一个学习内容”按钮已找到且可见，执行点击。');
-                            nextButton.click();
-                            clearInterval(findButtonInterval);
-                        } else if (attempts >= maxAttempts) {
-                            console.error('[增强脚本] 未能找到“下一个学习内容”按钮，或按钮不可见，自动连播失败。');
-                            clearInterval(findButtonInterval);
-                        }
-                    }, 500);
-                });
+                console.log('[增强脚本] 视频元素已找到，增强功能准备就绪。');
+
+                // --- 新增：音量记忆模块 ---
+                try {
+                    // 1. 应用已保存的音量
+                    const savedVolume = GM_getValue('videoVolume', 1.0); // 默认音量为1.0 (100%)
+                    videoElement.volume = savedVolume;
+                    console.log(`[增强脚本] 已自动应用上次保存的音量: ${Math.round(savedVolume * 100)}%`);
+
+                    // 2. 监听音量变化并保存
+                    videoElement.addEventListener('volumechange', () => {
+                        // 当用户调整音量时，保存新的音量值
+                        GM_setValue('videoVolume', videoElement.volume);
+                    });
+                } catch (e) {
+                    console.error('[增强脚本] 应用或监听音量失败:', e);
+                }
+
+                // --- 自动连播模块 ---
+                if (SETTINGS.autoNextVideo) {
+                    videoElement.addEventListener('ended', () => {
+                        if (!SETTINGS.autoNextVideo) return;
+                        console.log('[增强脚本] 视频播放结束，正在查找“下一个学习内容”按钮...');
+                        let attempts = 0;
+                        const maxAttempts = 20; // 最多尝试20次 (10秒)
+                        const findButtonInterval = setInterval(() => {
+                            attempts++;
+                            const nextButton = document.querySelector('.next_video_btn');
+                            // 检查按钮是否存在且可见 (offsetParent 在元素可见时才不为null)
+                            if (nextButton && nextButton.offsetParent !== null) {
+                                console.log('[增强脚本] “下一个学习内容”按钮已找到且可见，执行点击。');
+                                nextButton.click();
+                                clearInterval(findButtonInterval);
+                            } else if (attempts >= maxAttempts) {
+                                console.error('[增强脚本] 未能找到“下一个学习内容”按钮，或按钮不可见，自动连播失败。');
+                                clearInterval(findButtonInterval);
+                            }
+                        }, 500);
+                    });
+                }
             }
         }, 1000);
     }
+
 
     // --- 功能3：创建设置面板 (拖动问题已修复) ---
     function createSettingsPanel() {
@@ -137,26 +156,26 @@
         let isDragging = false;
         let offset = { x: 0, y: 0 };
 
+        // **语法已修复**: 将全角符号 '。' 和 '，' 替换为半角符号 '.' 和 ','
         header。addEventListener('mousedown'， (e) => {
             isDragging = true;
-            header。style。cursor = 'grabbing';
-            // 修复：将基于 bottom/right 的定位转换为 top/left，防止变形
+            header.style.cursor = 'grabbing';
             if (!settingsPanel.style.top) {
                 const rect = settingsPanel.getBoundingClientRect();
-                settingsPanel。style。top = `${rect。top}px`;
+                settingsPanel.style。top = `${rect。top}px`;
                 settingsPanel.style。left = `${rect。left}px`;
-                settingsPanel.style。bottom = 'auto';
-                settingsPanel.style.right = 'auto';
+                settingsPanel.style.bottom = 'auto';
+                settingsPanel。style。right = 'auto';
             }
             offset.x = e。clientX - parseFloat(settingsPanel。style。left);
-            offset.y = e。clientY - parseFloat(settingsPanel。style。top);
-            e.preventDefault(); // 防止拖动时选中文本
+            offset.y = e.clientY - parseFloat(settingsPanel.style.top);
+            e.preventDefault();
         });
 
         document。addEventListener('mousemove'， (e) => {
             if (!isDragging) return;
-            settingsPanel。style。left = `${e。clientX - offset.x}px`;
-            settingsPanel。style。top = `${e。clientY - offset.y}px`;
+            settingsPanel.style.left = `${e。clientX - offset。x}px`;
+            settingsPanel.style.top = `${e。clientY - offset。y}px`;
         });
 
         document.addEventListener('mouseup', () => {
@@ -169,11 +188,11 @@
 
     // --- 脚本主入口 ---
     function main() {
-        console。log('[增强脚本] 脚本已加载 v2.2 (后台+连播+设置版 - 已修复)。');
+        console。log('[增强脚本] 脚本已加载 v2.3 (新增音量记忆)。');
         loadSettings();
         createSettingsPanel();
         enableBackgroundPlay();
-        enableAutoNextVideo();
+        setupVideoPlayerExtensions(); // 替换旧的 enableAutoNextVideo()
     }
 
     setTimeout(main， 3000);
