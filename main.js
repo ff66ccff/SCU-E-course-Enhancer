@@ -1,18 +1,19 @@
 // ==UserScript==
 // @name         四川大学智慧教育平台增强脚本 (后台+连播+音量记忆)
 // @namespace    http://tampermonkey.net/
-// @version      2.3
+// @version      2.3.1
 // @description  后台播放、自动连播、音量记忆，并提供设置面板进行开关。修复了自动连播的稳定性和设置面板拖动变形的问题。
 // @author       ff66ccff & Gemini & AI Assistant
 // @match        https://ecourse.scu.edu.cn/learn/course/mooc/*
+// @match        *://*.scu.edu.cn/*
+// @domain       scu.edu.cn  // <--- 添加这一行
 // @grant        GM_setValue
 // @grant        GM_getValue
 // @run-at       document-idle
 // @license      MIT
-// @downloadURL https://update.greasyfork.org/scripts/547083/%E5%9B%9B%E5%B7%9D%E5%A4%A7%E5%AD%A6%E6%99%BA%E6%85%A7%E6%95%99%E8%82%B2%E5%B9%B3%E5%8F%B0%E5%A2%9E%E5%BC%BA%E8%84%9A%E6%9C%AC%20%28%E5%90%8E%E5%8F%B0%2B%E8%BF%9E%E6%92%AD%2B%E8%AE%BE%E7%BD%AE%E7%89%88%29.user.js
-// @updateURL https://update.greasyfork.org/scripts/547083/%E5%9B%9B%E5%B7%9D%E5%A4%A7%E5%AD%A6%E6%99%BA%E6%85%A7%E6%95%99%E8%82%B2%E5%B9%B3%E5%8F%B0%E5%A2%9E%E5%BC%BA%E8%84%9A%E6%9C%AC%20%28%E5%90%8E%E5%8F%B0%2B%E8%BF%9E%E6%92%AD%2B%E8%AE%BE%E7%BD%AE%E7%89%88%29.meta.js
+// @downloadURL  https://update.greasyfork.org/scripts/547083/%E5%9B%9B%E5%B7%9D%E5%A4%A7%E5%AD%A6%E6%99%BA%E6%85%A7%E6%95%99%E8%82%B2%E5%B9%B3%E5%8F%B0%E5%A2%9E%E5%BC%BA%E8%84%9A%E6%9C%AC%20%28%E5%90%8E%E5%8F%B0%2B%E8%BF%9E%E6%92%AD%2B%E8%AE%BE%E7%BD%AE%E7%89%88%29.user.js
+// @updateURL    https://update.greasyfork.org/scripts/547083/%E5%9B%9B%E5%B7%9D%E5%A4%A7%E5%AD%A6%E6%99%BA%E6%85%A7%E6%95%99%E8%82%B2%E5%B9%B3%E5%8F%B0%E5%A2%9E%E5%BC%BA%E8%84%9A%E6%9C%AC%20%28%E5%90%8E%E5%8F%B0%2B%E8%BF%9E%E6%92%AD%2B%E8%AE%BE%E7%BD%AE%E7%89%88%29.meta.js
 // ==/UserScript==
-
 (function() {
     'use strict';
 
